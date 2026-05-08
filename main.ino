@@ -18,25 +18,25 @@ void setup() {
   pinMode(rightEnable, OUTPUT);
 }
 
-void loop() {
-  // Example usage
-  moveForward(255);
-  delay(1000);
-  stopMotors();
-  delay(500);
-  moveBackward(255);
-  delay(1000);
-  stopMotors();
-  delay(500);
-  spinCenter(200, true); // clockwise
-  delay(1000);
-  stopMotors();
-  delay(500);
-  spinSide(200, true); // spin on left side
-  delay(1000);
-  stopMotors();
-  delay(500);
-}
+        void loop() {
+        // Example usage
+        moveForward(255);
+        delay(1000);
+        stopMotors();
+        delay(500);
+        moveBackward(255);
+        delay(1000);
+        stopMotors();
+        delay(500);
+        spinCenter(200, true); // clockwise
+        delay(1000);
+        stopMotors();
+        delay(500);
+        spinSide(200, true); // spin on left side
+        delay(1000);
+        stopMotors();
+        delay(500);
+        }
 
 // Driver functions for basic movement
 
