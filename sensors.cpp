@@ -1,49 +1,23 @@
 #include "sensors.h"
 #include "pinouts.h"
+#include "sharp.h"
+#include <Arduino.h>
 
-void read_sensors()
+int init_sensors()
 {
-    _sense_buffer[L_SENSE] = readDigital( SIDEL );
-    _sense_buffer[R_SENSE] = readDigital( SIDER );
-    _sense_buffer[M_SENSE] = readDigital( SIDEM );
-}
-
-void parse_sharp( struct sensor_info *sens )
-{
-    float d = lookup_v( toVoltage( readAnalog( pin ) ) );
-    if( d < 50 )
-    {
-        sense_buffer[mem] = DISTANCE.CLOSE;
-        close_front = 1;
-    }
-    else if( d < 100 )
-    {
-    }
-}
-
-int init_lookup( struct LOOKUP_TABLE *lt, float *d, float *v, size_t s )
-{
-    lt->size = s;
-    lt->d = (float *) malloc( s * sizeof( float ) );
-    lt->v = (float *) malloc( s * sizeof( float ) );
-    if( lt->d == NULL || lt->v == NULL )
+    if( sharp_init() < 0 )
     {
         return -1;
     }
-    memcpy( lt->d, d, s * sizeof(float) );
-    memcpy( lt->v, v, s * sizeof(float) );
-    return lt->size;
+    return 0;
 }
 
-float lookup_v( struct LOOKUP_TABLE *lt, float v )
+void read_sensors()
 {
-    if( v < lt->v[lt->size - 1] ) return -1;
-    for( int i = 0; i < lt->size; i++ )
-    {
-        if( v >= lt->v[i+1] )
-        {
-            return fap( v, lt->v[i], lt->v[i+1], lt->d[i], lt->d[i+1] );
-        }
-    }
-    return lt->d[0];
+    _analog_senses[ L_SHARP_BUF ] = sharp_read( SHARPL );
+    _analog_senses[ R_SHARP_BUF ] = sharp_read( SHARPR );
+
+    _digital_sense[ SIDE_L_BUF ] = digitalRead( SIDEL );
+    _digital_sense[ SIDE_R_BUF ] = digitalRead( SIDER );
+    _digital_sense[ FRONT_BUF ] = digitalRead( LONG );
 }

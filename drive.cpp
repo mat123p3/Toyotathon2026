@@ -1,4 +1,5 @@
 #include "drive.h"
+#include <Arduino.h>
 
 //private functions, low level
 void setLeftMotor(int speed, bool forward) {
