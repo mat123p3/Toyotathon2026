@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include "pinouts.h"
 
 // Motor control pins To be revised based on actual wiring
 const int leftMotorPin1 = 2;
