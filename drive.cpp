@@ -20,13 +20,13 @@ void setLeftMotor(int speed, bool forward) {
 void setRightMotor(int speed, bool forward) {
   speed = constrain(speed, 0, 255);
   if (forward) {
-    analogWrite (RIGHT_PWM_FWD, speed);
-    analogWrite (RIGHT_PWM_REV, 0);
+    analogWrite (RIGHT_PWM_FWD, 0);
+    analogWrite (RIGHT_PWM_REV, speed);
     digitalWrite(RIGHT_EN_FWD, HIGH);
     digitalWrite(RIGHT_EN_REV, HIGH);
   } else {
-    analogWrite (RIGHT_PWM_FWD, 0);
-    analogWrite (RIGHT_PWM_REV, speed);
+    analogWrite (RIGHT_PWM_FWD, speed);
+    analogWrite (RIGHT_PWM_REV, 0);
     digitalWrite(RIGHT_EN_FWD, HIGH);
     digitalWrite(RIGHT_EN_REV, HIGH);
   }
