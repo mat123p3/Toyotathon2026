@@ -8,11 +8,11 @@ void setLeftMotor(int speed, bool forward) {
     analogWrite (LEFT_PWM_FWD, speed);
     analogWrite (LEFT_PWM_REV, 0);
     digitalWrite(LEFT_EN_FWD, HIGH);
-    digitalWrite(LEFT_EN_REV, LOW);
+    digitalWrite(LEFT_EN_REV, HIGH);
   } else {
     analogWrite (LEFT_PWM_FWD, 0);
     analogWrite (LEFT_PWM_REV, speed);
-    digitalWrite(LEFT_EN_FWD, LOW);
+    digitalWrite(LEFT_EN_FWD, HIGH);
     digitalWrite(LEFT_EN_REV, HIGH);
   }
 }
@@ -23,11 +23,11 @@ void setRightMotor(int speed, bool forward) {
     analogWrite (RIGHT_PWM_FWD, speed);
     analogWrite (RIGHT_PWM_REV, 0);
     digitalWrite(RIGHT_EN_FWD, HIGH);
-    digitalWrite(RIGHT_EN_REV, LOW);
+    digitalWrite(RIGHT_EN_REV, HIGH);
   } else {
     analogWrite (RIGHT_PWM_FWD, 0);
     analogWrite (RIGHT_PWM_REV, speed);
-    digitalWrite(RIGHT_EN_FWD, LOW);
+    digitalWrite(RIGHT_EN_FWD, HIGH);
     digitalWrite(RIGHT_EN_REV, HIGH);
   }
 }
