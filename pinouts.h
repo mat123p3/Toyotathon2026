@@ -10,13 +10,13 @@
 #define LONG        D13
 #define SIDEL       D7
 #define SIDER       D8
-#define MOTOR0PWM0  D3
-#define MOTOR0PWM1  D6
-#define MOTOR0EN0   D4
-#define MOTOR0EN1   D5
-#define MOTOR1PWM0  D9
-#define MOTOR1PWM1  D11
-#define MOTOR1EN0   D10
-#define MOTOR1EN1   D12
+#define MOTOR0PWM0  D3 //lpwm
+#define MOTOR0PWM1  D6 //r pwm
+#define MOTOR0EN0   D4 //len
+#define MOTOR0EN1   D5 //r en
+#define MOTOR1PWM0  D9 //l pwm
+#define MOTOR1PWM1  D11 //r pwm
+#define MOTOR1EN0   D10 //L en
+#define MOTOR1EN1   D12 //right enable
 
 #endif
