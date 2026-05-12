@@ -37,4 +37,11 @@ class MZ80{
 
 };
 
+class JS200{
+    public:
+        void initSensor();
+        int readFront();
+        bool isObjectFront();
+};
+
 #endif

@@ -30,8 +30,13 @@ bool QT1RC::isAnyEdge(){
 
 //MZ80
 void MZ80::initSensor(){
-    pinMode(R_MZ80, INPUT); //pull up?
-    pinMode(L_MZ80, INPUT); //pull up?
+    pinMode(R_MZ80, INPUT_PULLUP);
+    pinMode(L_MZ80, INPUT_PULLUP);
+    //using pullup, when the sensor are inactive, the internal resistor will pull the pins
+    // to HIGH. When an object is detected, it will pull the pin to active LOW.
+    // Object -> 0
+    // No Object -> 1
+    // without the pullup, it will give floating and garbage readings causing bad outputs
 }
 int MZ80::readLeft(){
     return digitalRead(L_MZ80);
@@ -47,4 +52,15 @@ bool MZ80::isObjectRight(){
 }
 bool MZ80::isAnyObject(){
     return isObjectLeft() || isObjectRight();
+}
+
+//JS200
+void JS200::initSensor(){
+    pinMode(FR_JS200, INPUT_PULLUP);
+}
+int JS200::readFront(){
+    return digitalRead(FR_JS200);
+}
+bool JS200::isObjectFront(){
+    return readFront() == LOW;
 }
