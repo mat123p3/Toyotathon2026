@@ -1,8 +1,13 @@
 #ifndef __REMOTE_H__
 #define __REMOTE_H__
-#define START_PIN 2 //example pin, could be changed to any pin
 
-void init_remote( int pin );
-void kill();
+#include <Arduino.h>
+#include <stdint.h>
+
+inline void init_remote( uint8_t pin, void isr() )
+{
+    pinMode( pin, INPUT );
+    attachInterrupt( digitalPinToInterrupt( pin ), isr, LOW );
+}
 
 #endif

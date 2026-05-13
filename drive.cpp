@@ -1,86 +1,53 @@
-#include "drive.h"
 #include <Arduino.h>
+#include <stdint.h>
 
-//private functions, low level
-void setLeftMotor(int speed, bool forward) {
-  speed = constrain(speed, 0, 255);
-  if (forward) {
-    analogWrite (LEFT_PWM_FWD, speed);
-    analogWrite (LEFT_PWM_REV, 0);
-    digitalWrite(LEFT_EN_FWD, HIGH);
-    digitalWrite(LEFT_EN_REV, HIGH);
-  } else {
-    analogWrite (LEFT_PWM_FWD, 0);
-    analogWrite (LEFT_PWM_REV, speed);
-    digitalWrite(LEFT_EN_FWD, HIGH);
-    digitalWrite(LEFT_EN_REV, HIGH);
-  }
+#include "drive.h"
+
+void drive_init( struct driver *drv )
+{
+    analogWrite( drv->l.pwm_f_pin, 0 );
+    digitalWrite( drv->l.pwm_f_en, HIGH );
+    analogWrite( drv->l.pwm_b_pin, 0 );
+    digitalWrite( drv->l.pwm_b_en, HIGH );
 }
 
-void setRightMotor(int speed, bool forward) {
-  speed = constrain(speed, 0, 255);
-  if (forward) {
-    analogWrite (RIGHT_PWM_FWD, 0);
-    analogWrite (RIGHT_PWM_REV, speed);
-    digitalWrite(RIGHT_EN_FWD, HIGH);
-    digitalWrite(RIGHT_EN_REV, HIGH);
-  } else {
-    analogWrite (RIGHT_PWM_FWD, speed);
-    analogWrite (RIGHT_PWM_REV, 0);
-    digitalWrite(RIGHT_EN_FWD, HIGH);
-    digitalWrite(RIGHT_EN_REV, HIGH);
-  }
+void drive_move( struct driver *drv, uint8_t p, int8_t d )
+{
+    uint8_t pwm_tgt_l = ( d < 0 ) ? drv->l.pwm_b_pin : drv->l.pwm_f_pin;
+    uint8_t pwm_tgt_r = ( d < 0 ) ? drv->r.pwm_b_pin : drv->r.pwm_f_pin;
+    analogWrite( pwm_tgt_l, p );
+    analogWrite( pwm_tgt_r, p );
 }
 
-//public functions, high level
-void motorsInit() {
-  pinMode(LEFT_PWM_FWD, OUTPUT);
-  pinMode(LEFT_PWM_REV, OUTPUT);
-  pinMode(LEFT_EN_FWD, OUTPUT);
-  pinMode(LEFT_EN_REV, OUTPUT);
-  pinMode(RIGHT_PWM_FWD, OUTPUT);
-  pinMode(RIGHT_PWM_REV, OUTPUT);
-  pinMode(RIGHT_EN_FWD, OUTPUT);
-  pinMode(RIGHT_EN_REV, OUTPUT);
-  stopMotors();
+void drive_move( struct driver *drv, uint8_t p, int8_t d, float r, int8_t c )
+{
+    r = constrain( c, 0.0, 1.0 );
+    uint8_t pwm_tgt_l = ( d < 0 ) ? drv->l.pwm_b_pin : drv->l.pwm_f_pin;
+    uint8_t pwm_tgt_r = ( d < 0 ) ? drv->r.pwm_b_pin : drv->r.pwm_f_pin;
+    if( c < 0 )
+    {
+        analogWrite( pwm_tgt_l, p * c );
+        analogWrite( pwm_tgt_r, p );
+    }
+    else
+    {
+        analogWrite( pwm_tgt_l, p );
+        analogWrite( pwm_tgt_r, p * c );
+    }
 }
 
-void moveForward(int speed) {
-  setLeftMotor (speed, true);
-  setRightMotor(speed, true);
+void drive_spin( struct driver *drv, uint8_t p, uint8_t c )
+{
+    uint8_t pwm_tgt_l = ( c < 0 ) ? drv->l.pwm_b_pin : drv->l.pwm_f_pin;
+    uint8_t pwm_tgt_r = ( c < 0 ) ? drv->r.pwm_f_pin : drv->r.pwm_b_pin;
+    analogWrite( pwm_tgt_l, p );
+    analogWrite( pwm_tgt_r, p );
 }
 
-void moveBackward(int speed) {
-  setLeftMotor (speed, false);
-  setRightMotor(speed, false);
-}
-
-void spinCenter(int speed, bool clockwise) {
-  //clockwise  = left fwd  + right rev
-  //anti-clockwise = left rev  + right fwd
-  setLeftMotor (speed, clockwise);
-  setRightMotor(speed, !clockwise);
-}
-
-void spinSide(int speed, bool leftSide) {
-  if (leftSide) {
-    //pivot on left wheel: left motor stopped, right motor forward
-    setLeftMotor (0, true);
-    setRightMotor(speed, true);
-  } else {
-    //pivot on right wheel: right motor stopped, left motor forward
-    setLeftMotor (speed, true);
-    setRightMotor(0, true);
-  }
-}
-
-void stopMotors() {
-  analogWrite (LEFT_PWM_FWD, 0);
-  analogWrite (LEFT_PWM_REV, 0);
-  digitalWrite(LEFT_EN_FWD, LOW);
-  digitalWrite(LEFT_EN_REV, LOW);
-  analogWrite (RIGHT_PWM_FWD, 0);
-  analogWrite (RIGHT_PWM_REV, 0);
-  digitalWrite(RIGHT_EN_FWD, LOW);
-  digitalWrite(RIGHT_EN_REV, LOW);
+void drive_lock( struct driver *drv )
+{
+    digitalWrite( drv->l.pwm_f_pin, LOW );
+    digitalWrite( drv->l.pwm_b_pin, LOW );
+    digitalWrite( drv->r.pwm_f_pin, LOW );
+    digitalWrite( drv->r.pwm_b_pin, LOW );
 }
