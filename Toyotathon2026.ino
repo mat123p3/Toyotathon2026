@@ -10,11 +10,15 @@ struct driver drv = {   (struct motor){ MOTOR0PWM0, MOTOR0EN0, MOTOR0PWM1, MOTOR
                         (struct motor){ MOTOR1PWM0, MOTOR1EN0, MOTOR1PWM1, MOTOR1EN1 } };
 
 
-long next_target;
+void kill_switch()
+{
+    drive_lock( &drv );
+}
+
 
 void setup() {
     drive_init( &drv );
-    next_target = millis() + 1000;
+    init_remote( STARTER_PIN , kill_switch );
 }
 
 void loop() {
