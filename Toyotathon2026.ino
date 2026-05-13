@@ -13,6 +13,7 @@ struct driver drv = {   (struct motor){ MOTOR0PWM0, MOTOR0EN0, MOTOR0PWM1, MOTOR
 void kill_switch()
 {
     drive_lock( &drv );
+    exit(0);
 }
 
 
