@@ -19,6 +19,7 @@ void kill_switch()
 
 void setup() {
     drive_init( &drv );
+    while( !digitalRead( STARTER_PIN ) );
     init_remote( STARTER_PIN , kill_switch );
 }
 
