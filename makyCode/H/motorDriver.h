@@ -7,6 +7,7 @@
 // could always add more ,or make a function that can alter the speed
 #define FULLSPEED 255
 #define SLOWSPEED 120
+#define TURNSPEED 180
 
 //motor driver BTS7960 with driver functions
 //Motor driver class
