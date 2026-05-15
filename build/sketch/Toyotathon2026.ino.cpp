@@ -1,5 +1,6 @@
 #line 1 "/home/cheese/code/Toyotathon2026/Toyotathon2026.ino"
 #include <Arduino.h>
+#include "HardwareSerial.h"
 #include "drive.h"
 #include "pinouts.h"
 #include "remote.h"
@@ -16,13 +17,13 @@ struct driver drv = {   (struct motor){ MOTOR0PWM1, MOTOR0EN1, MOTOR0PWM0, MOTOR
 void sweep_left();
 void sweep_right();
 
-#line 30 "/home/cheese/code/Toyotathon2026/Toyotathon2026.ino"
+#line 31 "/home/cheese/code/Toyotathon2026/Toyotathon2026.ino"
 void kill_switch();
-#line 36 "/home/cheese/code/Toyotathon2026/Toyotathon2026.ino"
+#line 37 "/home/cheese/code/Toyotathon2026/Toyotathon2026.ino"
 void setup();
-#line 49 "/home/cheese/code/Toyotathon2026/Toyotathon2026.ino"
+#line 50 "/home/cheese/code/Toyotathon2026/Toyotathon2026.ino"
 void loop();
-#line 18 "/home/cheese/code/Toyotathon2026/Toyotathon2026.ino"
+#line 19 "/home/cheese/code/Toyotathon2026/Toyotathon2026.ino"
 void sweep_left()
 {
     drive_move( &drv, 255, 1, 0.8, 0 );
@@ -42,11 +43,10 @@ void kill_switch()
 }
 
 void setup() {
-    Serial.begin(9600);
-    //drive_init( &drv );
+    drive_init( &drv );
     while( !digitalRead( STARTER_PIN ) );
     init_remote( STARTER_PIN , kill_switch );
-    //drive_move( &drv, 120, 1 );
+    drive_move( &drv, 130, 1 );
 }
 
 static uint8_t line;
@@ -54,9 +54,10 @@ static uint8_t radar;
 static unsigned long lst;
 static uint8_t lsd;
 static uint8_t lsc;
+
 void loop() {
     read_sensors();
-
+    line = on_line();
     radar = find_enemy();
     if( radar & 0b01110 )
     {
@@ -65,29 +66,34 @@ void loop() {
         else lsd = 2;
         lst = millis();
     }
-    Serial.println( on_line(), BIN );
-    //Serial.println( on_line() & 0b101, BIN );
-    if( r_st != REPO && ( line = on_line() & 0b101) ) r_st = ON_LINE;
+    if( r_st != REPO && ( line & 0b101 ) ){
+        r_st = ON_LINE;
+    }
     switch( r_st )
     {
         case ON_LINE:
-            drive_lock( &drv );
-            exit(0);
             r_st = REPO;
-            if( line & 0b1 )
+            drive_move( &drv, 200, 0 );
+            delay(200);
+            if( line & 0b001 )
             {
-                drive_spin( &drv, 120, 1 );
+                drive_spin( &drv, 60, 0 );
             }
             else
             {
-                drive_spin( &drv, 120, 0 );
+                drive_spin( &drv, 60, 1 );
             }
             break;
         case REPO:
-            if( line & 0b01 ) r_st = SEARCHING;
+            if( radar & 0b00100 || line & 0b010 )
+            {
+                drive_lock( &drv );
+                delay(25);
+                drive_move( &drv, 130, 1 );
+                r_st = SEARCHING;
+            }
             break;
         default:
-            drive_move( &drv, 120, 1 );
             break;
 
         /*

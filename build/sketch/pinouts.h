@@ -7,9 +7,9 @@
 
 #define SHARP_L_PIN         A0
 #define SHARP_R_PIN         A1
-#define LINE_L_PIN          A2
-#define LINE_F_PIN          A3
-#define LINE_R_PIN          A4
+#define LINE_L_PIN          A3
+#define LINE_F_PIN          A4
+#define LINE_R_PIN          A2
 #define STARTER_PIN         2
 #define FRONT_PIN           13
 #define SIDE_L_PIN          7

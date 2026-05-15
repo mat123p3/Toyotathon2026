@@ -3,6 +3,7 @@
 #define __SENSORS_H__
 
 #include <stdint.h>
+#include <Arduino.h>
 
 #define     SENSOR_COUNT 9
 
@@ -14,7 +15,7 @@
 #define QTR_L_BUF   5
 #define QTR_M_BUF   6
 #define QTR_R_BUF   7
-static uint8_t _s_buf[ 8 ];
+inline uint8_t _s_buf[ 8 ];
 
 #define CALIBRATION_COUNT 200
 /*
@@ -44,7 +45,7 @@ inline uint8_t find_enemy()
  */
 inline uint8_t on_line()
 {
-    return _s_buf[QTR_L_BUF] | _s_buf[QTR_M_BUF] << 1 | _s_buf[QTR_R_BUF] << 2;
+    return _s_buf[QTR_R_BUF] | _s_buf[QTR_M_BUF] << 1 | _s_buf[QTR_L_BUF] << 2;
 }
 
 #endif

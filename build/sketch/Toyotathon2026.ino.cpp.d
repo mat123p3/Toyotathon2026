@@ -12,6 +12,7 @@
  /home/cheese/.arduino15/packages/arduino/hardware/avr/1.8.7/cores/arduino/Arduino.h \
  /home/cheese/.arduino15/packages/arduino/hardware/avr/1.8.7/variants/eightanaloginputs/pins_arduino.h \
  /home/cheese/.arduino15/packages/arduino/hardware/avr/1.8.7/variants/eightanaloginputs/../standard/pins_arduino.h \
+ /home/cheese/.arduino15/packages/arduino/hardware/avr/1.8.7/cores/arduino/HardwareSerial.h \
  /home/cheese/code/Toyotathon2026/build/sketch/drive.h \
  /home/cheese/code/Toyotathon2026/build/sketch/pinouts.h \
  /home/cheese/code/Toyotathon2026/build/sketch/remote.h \

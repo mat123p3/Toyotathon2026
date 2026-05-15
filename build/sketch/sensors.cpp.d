@@ -13,7 +13,6 @@
  /home/cheese/.arduino15/packages/arduino/hardware/avr/1.8.7/variants/eightanaloginputs/pins_arduino.h \
  /home/cheese/.arduino15/packages/arduino/hardware/avr/1.8.7/variants/eightanaloginputs/../standard/pins_arduino.h \
  /home/cheese/code/Toyotathon2026/build/sketch/sensors.h \
- /home/cheese/Arduino/libraries/QTRSensors/QTRSensors.h \
  /home/cheese/code/Toyotathon2026/build/sketch/pinouts.h \
  /home/cheese/code/Toyotathon2026/build/sketch/sharp.h \
  /home/cheese/code/Toyotathon2026/build/sketch/toyotathon.h
