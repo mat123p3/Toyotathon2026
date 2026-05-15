@@ -1,3 +1,4 @@
+#line 1 "/home/cheese/code/Toyotathon2026/Toyotathon2026.ino"
 #include <Arduino.h>
 #include "drive.h"
 #include "pinouts.h"
@@ -15,6 +16,13 @@ struct driver drv = {   (struct motor){ MOTOR0PWM1, MOTOR0EN1, MOTOR0PWM0, MOTOR
 void sweep_left();
 void sweep_right();
 
+#line 30 "/home/cheese/code/Toyotathon2026/Toyotathon2026.ino"
+void kill_switch();
+#line 36 "/home/cheese/code/Toyotathon2026/Toyotathon2026.ino"
+void setup();
+#line 49 "/home/cheese/code/Toyotathon2026/Toyotathon2026.ino"
+void loop();
+#line 18 "/home/cheese/code/Toyotathon2026/Toyotathon2026.ino"
 void sweep_left()
 {
     drive_move( &drv, 255, 1, 0.8, 0 );
@@ -131,3 +139,4 @@ void loop() {
         */
     }
 }
+

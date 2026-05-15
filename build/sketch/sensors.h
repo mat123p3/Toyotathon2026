@@ -1,3 +1,4 @@
+#line 1 "/home/cheese/code/Toyotathon2026/sensors.h"
 #ifndef __SENSORS_H__
 #define __SENSORS_H__
 
