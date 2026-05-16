@@ -35,6 +35,7 @@ void drive_move( struct driver *drv, uint8_t p, int8_t d )
 void drive_move( struct driver *drv, uint8_t p, int8_t d, float r, int8_t c )
 {
     r = constrain( r, 0.0, 1.0 );
+    drive_reset( drv );
     uint8_t pwm_tgt_l = ( !d ) ? drv->l.pwm_b_pin : drv->l.pwm_f_pin;
     uint8_t pwm_tgt_r = ( !d ) ? drv->r.pwm_b_pin : drv->r.pwm_f_pin;
     if( !c )

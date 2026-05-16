@@ -35,7 +35,7 @@ void read_sensors();
  */
 inline uint8_t find_enemy()
 {
-    return _s_buf[SIDE_L_BUF] | _s_buf[SHARP_L_BUF] << 1 | _s_buf[FRONT_BUF] << 2 | _s_buf[SHARP_R_BUF] << 3 | _s_buf[SIDE_R_BUF] << 4;
+    return _s_buf[SIDE_R_BUF] | _s_buf[SHARP_R_BUF] << 1 | _s_buf[FRONT_BUF] << 2 | _s_buf[SHARP_L_BUF] << 3 | _s_buf[SIDE_L_BUF] << 4;
 }
 
 /*

@@ -1,6 +1,5 @@
 #line 1 "/home/cheese/code/Toyotathon2026/Toyotathon2026.ino"
 #include <Arduino.h>
-#include "HardwareSerial.h"
 #include "drive.h"
 #include "pinouts.h"
 #include "remote.h"
@@ -8,6 +7,8 @@
 #include "toyotathon.h"
 
 STATE r_st = SEARCHING;
+
+#define DRIVE_SPEED 100
 
 struct scheduler sch;
 
@@ -17,13 +18,13 @@ struct driver drv = {   (struct motor){ MOTOR0PWM1, MOTOR0EN1, MOTOR0PWM0, MOTOR
 void sweep_left();
 void sweep_right();
 
-#line 31 "/home/cheese/code/Toyotathon2026/Toyotathon2026.ino"
+#line 32 "/home/cheese/code/Toyotathon2026/Toyotathon2026.ino"
 void kill_switch();
-#line 37 "/home/cheese/code/Toyotathon2026/Toyotathon2026.ino"
+#line 38 "/home/cheese/code/Toyotathon2026/Toyotathon2026.ino"
 void setup();
-#line 50 "/home/cheese/code/Toyotathon2026/Toyotathon2026.ino"
+#line 52 "/home/cheese/code/Toyotathon2026/Toyotathon2026.ino"
 void loop();
-#line 19 "/home/cheese/code/Toyotathon2026/Toyotathon2026.ino"
+#line 20 "/home/cheese/code/Toyotathon2026/Toyotathon2026.ino"
 void sweep_left()
 {
     drive_move( &drv, 255, 1, 0.8, 0 );
@@ -46,14 +47,15 @@ void setup() {
     drive_init( &drv );
     while( !digitalRead( STARTER_PIN ) );
     init_remote( STARTER_PIN , kill_switch );
-    drive_move( &drv, 130, 1 );
+    init_sensors();
+    drive_move( &drv, DRIVE_SPEED, 1 );
+    r_st = TRACKING;
 }
 
 static uint8_t line;
 static uint8_t radar;
-static unsigned long lst;
 static uint8_t lsd;
-static uint8_t lsc;
+static uint8_t agro;
 
 void loop() {
     read_sensors();
@@ -64,7 +66,6 @@ void loop() {
         if( radar & 0b00100 ) lsd = 0;
         else if( radar & 0b01000 ) lsd = 1;
         else lsd = 2;
-        lst = millis();
     }
     if( r_st != REPO && ( line & 0b101 ) ){
         r_st = ON_LINE;
@@ -85,12 +86,30 @@ void loop() {
             }
             break;
         case REPO:
-            if( radar & 0b00100 || line & 0b010 )
+            if( radar & 0b01110 || line & 0b010 )
             {
+                r_st = TRACKING;
                 drive_lock( &drv );
                 delay(25);
-                drive_move( &drv, 130, 1 );
-                r_st = SEARCHING;
+            }
+            break;
+        case TRACKING:
+            if( !( radar & 0b01110 ) )
+            {
+                r_st = TRACKING_ADJUST;
+                agro = 0;
+            }
+            break;
+        case TRACKING_ADJUST:
+            if( lsd == 0 )
+            {
+                drive_move( &drv, DRIVE_SPEED, 1 );
+                r_st = TRACKING;
+            }
+            else if( radar & 0b01010 )
+            {
+                constrain( ++agro, 0, 200 );
+                drive_move( &drv, DRIVE_SPEED, 1, 1 - fap( agro, 0, 200, 0.4, 1 ), ( lsd == 1 ) ? 1 : 0 );
             }
             break;
         default:

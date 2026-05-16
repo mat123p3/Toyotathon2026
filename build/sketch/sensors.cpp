@@ -9,7 +9,6 @@ void init_sensors()
 {
     pinMode( SHARP_L_PIN, INPUT );
     pinMode( SHARP_R_PIN, INPUT );
-
     pinMode( LINE_L_PIN, INPUT );
     pinMode( LINE_F_PIN, INPUT );
     pinMode( LINE_R_PIN, INPUT );
@@ -31,5 +30,4 @@ void read_sensors()
     _s_buf[QTR_L_BUF] = ( analogRead( LINE_L_PIN ) < _qtr_thresh ) ? 1 : 0;
     _s_buf[QTR_M_BUF] = ( analogRead( LINE_F_PIN ) < _qtr_thresh ) ? 1 : 0;
     _s_buf[QTR_R_BUF] = ( analogRead( LINE_R_PIN ) < _qtr_thresh ) ? 1 : 0;
-
 }
